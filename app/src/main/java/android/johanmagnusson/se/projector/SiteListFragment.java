@@ -1,5 +1,6 @@
 package android.johanmagnusson.se.projector;
 
+import android.content.Context;
 import android.johanmagnusson.se.projector.model.Site;
 import android.johanmagnusson.se.projector.viewholder.SiteViewHolder;
 import android.os.Bundle;
@@ -10,7 +11,6 @@ import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -19,16 +19,13 @@ import com.google.firebase.database.Query;
 
 public class SiteListFragment extends Fragment {
 
+    public interface SiteListListener {
+        public void onSiteSelected(String sitekey);
+    }
+
     private static final String TAG = SiteListFragment.class.getSimpleName();
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
+    private SiteListListener mListener;
 
     private DatabaseReference mDatabase;
 
@@ -38,25 +35,6 @@ public class SiteListFragment extends Fragment {
 
     public SiteListFragment() {
         // Required empty public constructor
-    }
-
-    public static SiteListFragment newInstance(String param1, String param2) {
-        SiteListFragment fragment = new SiteListFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
-    }
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
     }
 
     @Override
@@ -88,12 +66,12 @@ public class SiteListFragment extends Fragment {
 
                 viewHolder.bindToPost(model);
 
-                // Click listener
-                String siteKey = ref.getKey(); //todo: key not used yet
+                // Item click listener
+                final String siteKey = ref.getKey(); //todo: key not used yet
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(getActivity(), model.getName(), Toast.LENGTH_SHORT).show();
+                        mListener.onSiteSelected(siteKey);
                     }
                 });
             }
@@ -108,6 +86,20 @@ public class SiteListFragment extends Fragment {
 
         if(mAdapter != null) {
             mAdapter.cleanup();
+        }
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+
+        // Verify that the host activity implements the callback interface
+        try {
+            // Instantiate the Listener so we can send events to the host
+            mListener = (SiteListListener) context;
+        } catch (ClassCastException e) {
+            // The activity doesn't implement the interface, throw exception
+            throw new ClassCastException(context.toString() + " must implement SiteListListener");
         }
     }
 }

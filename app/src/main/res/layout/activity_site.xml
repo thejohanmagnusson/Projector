@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
-    tools:context="android.johanmagnusson.se.projector.MainActivity">
+    tools:context="android.johanmagnusson.se.projector.SiteActivity">
 
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
@@ -22,11 +22,11 @@
     </android.support.design.widget.AppBarLayout>
 
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"
-        android:id="@+id/fragment_site_list"
-        android:name="android.johanmagnusson.se.projector.SiteListFragment"
+        android:id="@+id/fragment_site"
+        android:name="android.johanmagnusson.se.projector.SiteFragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:layout="@layout/fragment_site_list"
+        tools:layout="@layout/fragment_site"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
     <android.support.design.widget.FloatingActionButton

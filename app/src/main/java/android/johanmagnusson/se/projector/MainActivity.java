@@ -1,5 +1,6 @@
 package android.johanmagnusson.se.projector;
 
+import android.content.Intent;
 import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.os.Bundle;
@@ -16,7 +17,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 public class MainActivity extends AppCompatActivity
-                          implements SiteDialogFragment.SiteDialogListener {
+                          implements SiteDialogFragment.SiteDialogListener,
+                                     SiteListFragment.SiteListListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
 
@@ -35,11 +37,14 @@ public class MainActivity extends AppCompatActivity
 
         //todo: handle two pane mode on tablets
 
+        // Create site action
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = new SiteDialogFragment();
+                String title = getString(R.string.create_site);
+
+                DialogFragment dialog = new SiteDialogFragment().newInstance(title, "");
                 dialog.show(getSupportFragmentManager(), "Dialog_tag");
             }
         });
@@ -54,9 +59,6 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
@@ -91,5 +93,11 @@ public class MainActivity extends AppCompatActivity
 
         Site site = new Site(siteName, "Anonymous");
         ref.setValue(site);
+    }
+
+    @Override
+    public void onSiteSelected(String sitekey) {
+        Intent intent = new Intent(this, SiteActivity.class);
+        startActivity(intent);
     }
 }

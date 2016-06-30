@@ -1,7 +1,13 @@
 <resources>
     <string name="app_name">Projector</string>
+
+    <!-- Menus -->
+    <string name="action_edit">Edit</string>
     <string name="action_settings">Settings</string>
 
     <!-- Dialogs -->
-    <string name="hint_add_site">Site name</string>
+    <string name="create_site">New site</string>
+    <string name="edit_site">Edit site</string>
+    <string name="hint_site_name">Site name</string>
+    <string name="positive_button_text">Looks good</string>
 </resources>
