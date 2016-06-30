@@ -3,4 +3,10 @@
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
     <color name="colorAccent">#FF4081</color>
+
+    <color name="black">#000000</color>
+    <color name="primaryText">#57000000</color>
+    <color name="secondaryText">#36000000</color>
+    <color name="hintText">#26000000</color>
+    <color name="disabledText">#26000000</color>
 </resources>

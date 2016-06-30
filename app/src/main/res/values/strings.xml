@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">Projector</string>
     <string name="action_settings">Settings</string>
+
+    <!-- Dialogs -->
+    <string name="hint_add_site">Site name</string>
 </resources>
