@@ -10,4 +10,7 @@
     <string name="edit_site">Edit site</string>
     <string name="hint_site_name">Site name</string>
     <string name="positive_button_text">Looks good</string>
+
+    <!-- Log messages -->
+    <string name="firebase_read_error">Firebase read error: </string>
 </resources>
