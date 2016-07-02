@@ -60,6 +60,7 @@ public class SiteListFragment extends Fragment {
         mRecyclerView.setLayoutManager(mManager);
 
         Query siteQuery = mDatabase.child(Firebase.NODE_SITES);
+
         mAdapter = new FirebaseRecyclerAdapter<Site, SiteViewHolder>(Site.class, R.layout.site_item, SiteViewHolder.class, siteQuery) {
             @Override
             protected void populateViewHolder(SiteViewHolder viewHolder, final Site model, int position) {
@@ -68,7 +69,7 @@ public class SiteListFragment extends Fragment {
                 viewHolder.bindToPost(model);
 
                 // Item click listener
-                final String siteKey = ref.getKey(); //todo: key not used yet
+                final String siteKey = ref.getKey();
                 viewHolder.itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
