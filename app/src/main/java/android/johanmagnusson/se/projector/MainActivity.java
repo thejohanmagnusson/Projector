@@ -1,6 +1,7 @@
 package android.johanmagnusson.se.projector;
 
 import android.content.Intent;
+import android.johanmagnusson.se.projector.constant.DataKey;
 import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.os.Bundle;
@@ -15,6 +16,8 @@ import android.view.View;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity
                           implements SiteDialogFragment.SiteDialogListener,
@@ -69,35 +72,26 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
+    // SiteDialogFragment.SiteDialogListener
     @Override
-    public void onDialogPositiveClick(String siteName) {
+    public void onDialogPositiveClick(String siteId, String siteName) {
         if(!TextUtils.isEmpty(siteName))
             createSite(siteName);
     }
 
     private void createSite(String siteName) {
         // Create new site at /sites/$siteid
-        DatabaseReference ref = mDatabase.child(Firebase.NODE_SITE);
-//        ref.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(DataSnapshot dataSnapshot) {
-//                Site site = dataSnapshot.getValue(Site.class);
-//                Toast.makeText(MainActivity.this, site.getName(), Toast.LENGTH_SHORT).show();
-//            }
-//
-//            @Override
-//            public void onCancelled(DatabaseError databaseError) {
-//
-//            }
-//        });
-
+        String key = mDatabase.child(Firebase.NODE_SITES).push().getKey();
         Site site = new Site(siteName, "Anonymous");
-        ref.setValue(site);
+        Map<String, Object> postValues = site.toMap();
+        mDatabase.child(Firebase.NODE_SITES).child(key).setValue(postValues);
     }
 
+    // SiteListFragment.SiteListListener
     @Override
     public void onSiteSelected(String sitekey) {
         Intent intent = new Intent(this, SiteActivity.class);
+        intent.putExtra(DataKey.SITE_KEY, sitekey);
         startActivity(intent);
     }
 }

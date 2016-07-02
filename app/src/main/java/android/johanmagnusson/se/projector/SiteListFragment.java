@@ -1,6 +1,7 @@
 package android.johanmagnusson.se.projector;
 
 import android.content.Context;
+import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.johanmagnusson.se.projector.viewholder.SiteViewHolder;
 import android.os.Bundle;
@@ -58,7 +59,7 @@ public class SiteListFragment extends Fragment {
         mManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mManager);
 
-        Query siteQuery = mDatabase; // Using root node since we have no child nodes yet
+        Query siteQuery = mDatabase.child(Firebase.NODE_SITES);
         mAdapter = new FirebaseRecyclerAdapter<Site, SiteViewHolder>(Site.class, R.layout.site_item, SiteViewHolder.class, siteQuery) {
             @Override
             protected void populateViewHolder(SiteViewHolder viewHolder, final Site model, int position) {

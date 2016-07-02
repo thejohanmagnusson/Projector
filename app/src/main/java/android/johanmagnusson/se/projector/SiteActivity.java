@@ -1,5 +1,8 @@
 package android.johanmagnusson.se.projector;
 
+import android.johanmagnusson.se.projector.constant.DataKey;
+import android.johanmagnusson.se.projector.constant.Firebase;
+import android.johanmagnusson.se.projector.model.Site;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
@@ -14,6 +17,8 @@ import android.view.View;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 public class SiteActivity extends AppCompatActivity
                           implements SiteDialogFragment.SiteDialogListener {
@@ -30,15 +35,11 @@ public class SiteActivity extends AppCompatActivity
 
         setContentView(R.layout.activity_site);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
-
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         mActionBar = getSupportActionBar();
         if(mActionBar != null) { mActionBar.setDisplayHomeAsUpEnabled(true); }
-
-        //todo: handle two pane mode on tablets
 
         //todo: change fab action(s)
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -49,6 +50,23 @@ public class SiteActivity extends AppCompatActivity
                 dialog.show(getSupportFragmentManager(), "Dialog_tag");
             }
         });
+
+        // Add site fragment and pass on any extra data
+        if(savedInstanceState == null) {
+            String siteKey = getIntent().getStringExtra(DataKey.SITE_KEY);
+
+            SiteFragment siteFragment = new SiteFragment();
+
+            if(siteKey != null) {
+                Bundle args = new Bundle();
+                args.putString(DataKey.SITE_KEY, siteKey);
+                siteFragment.setArguments(args);
+            }
+
+            getSupportFragmentManager().beginTransaction().add(R.id.site_container, siteFragment).commit();
+        }
+
+        mDatabase = FirebaseDatabase.getInstance().getReference();
     }
 
     @Override
@@ -67,6 +85,10 @@ public class SiteActivity extends AppCompatActivity
             return true;
         }
         else if (id == R.id.action_edit) {
+            String title = getString(R.string.edit_site);
+
+            DialogFragment dialog = new SiteDialogFragment().newInstance(title, "");
+            dialog.show(getSupportFragmentManager(), "Dialog_tag");
             return true;
         }
         else if (id == R.id.action_settings) {
@@ -85,6 +107,10 @@ public class SiteActivity extends AppCompatActivity
     //todo: Fix method
     private void updateSite(String siteId, String siteName) {
         // Update site at /sites/$siteid
+        DatabaseReference ref = mDatabase.child(Firebase.NODE_SITES);
 
+        Site site = new Site(siteName, "Anonymous");
+        Map<String, Object> postValues = site.toMap();
+        ref.updateChildren(postValues);
     }
 }
