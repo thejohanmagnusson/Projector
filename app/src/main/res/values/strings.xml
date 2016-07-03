@@ -3,13 +3,17 @@
 
     <!-- Menus -->
     <string name="action_edit">Edit</string>
+    <string name="action_remove">Remove</string>
     <string name="action_settings">Settings</string>
 
     <!-- Dialogs -->
     <string name="create_site">New site</string>
-    <string name="edit_site">Edit site</string>
+    <string name="edit_site_title">Edit site</string>
+    <string name="remove_site_title">Remove site</string>
+    <string name="remove_site_message">This will permanently remove the site</string>
     <string name="hint_site_name">Site name</string>
-    <string name="positive_button_text">Looks good</string>
+    <string name="button_yes">Looks good</string>
+    <string name="button_no">No</string>
 
     <!-- Log messages -->
     <string name="firebase_read_error">Firebase read error: </string>

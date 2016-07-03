@@ -1,5 +1,6 @@
-package android.johanmagnusson.se.projector;
+package android.johanmagnusson.se.projector.views.siteDetails;
 
+import android.johanmagnusson.se.projector.R;
 import android.johanmagnusson.se.projector.constant.DataKey;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;

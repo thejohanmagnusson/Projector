@@ -1,6 +1,7 @@
-package android.johanmagnusson.se.projector;
+package android.johanmagnusson.se.projector.views.sites;
 
 import android.content.Context;
+import android.johanmagnusson.se.projector.R;
 import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.johanmagnusson.se.projector.viewholder.SiteViewHolder;
@@ -21,7 +22,7 @@ import com.google.firebase.database.Query;
 public class SiteListFragment extends Fragment {
 
     public interface SiteListListener {
-        public void onSiteSelected(String sitekey);
+        public void onSiteSelected(String siteKey);
     }
 
     private static final String TAG = SiteListFragment.class.getSimpleName();

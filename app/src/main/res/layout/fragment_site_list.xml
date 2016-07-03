@@ -2,7 +2,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="android.johanmagnusson.se.projector.SiteListFragment">
+    tools:context=".views.sites.SiteListFragment">
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/site_list"

@@ -6,7 +6,7 @@
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
     android:paddingTop="@dimen/activity_vertical_margin"
-    tools:context="android.johanmagnusson.se.projector.SiteListFragment"
+    tools:context=".views.sites.SiteListFragment"
     tools:showIn="@layout/activity_main">
 
     <TextView
