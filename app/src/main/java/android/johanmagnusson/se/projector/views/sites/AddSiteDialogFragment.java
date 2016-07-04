@@ -22,13 +22,7 @@ import java.util.Map;
 
 public class AddSiteDialogFragment extends DialogFragment{
 
-    public interface AddSiteDialogListener {
-        public void onAddSiteClick(String siteName);
-    }
-
     public static final String TAG = SiteListFragment.class.getSimpleName();
-
-    private AddSiteDialogListener mListener;
 
     public static AddSiteDialogFragment newInstance() {
         return new AddSiteDialogFragment();

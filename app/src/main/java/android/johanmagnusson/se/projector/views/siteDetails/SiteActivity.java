@@ -50,8 +50,8 @@ public class SiteActivity extends AppCompatActivity {
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = new EditSiteNameDialogFragment();
-                dialog.show(getSupportFragmentManager(), "Dialog_tag");
+                DialogFragment dialog = new AddProjectDialogFragment();
+                dialog.show(getSupportFragmentManager(), AddProjectDialogFragment.TAG);
             }
         });
 

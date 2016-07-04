@@ -12,6 +12,11 @@
     <string name="remove_site_title">Remove site</string>
     <string name="remove_site_message">This will permanently remove the site</string>
     <string name="hint_site_name">Site name</string>
+
+    <string name="create_project">New project</string>
+    <string name="hint_project_name">Project name</string>
+    <string name="hint_project_number">Project number</string>
+
     <string name="button_yes">Looks good</string>
     <string name="button_no">No</string>
 
