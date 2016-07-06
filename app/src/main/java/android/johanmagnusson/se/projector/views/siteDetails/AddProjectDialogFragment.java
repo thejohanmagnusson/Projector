@@ -4,20 +4,47 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.johanmagnusson.se.projector.R;
+import android.johanmagnusson.se.projector.constant.DataKey;
+import android.johanmagnusson.se.projector.constant.Firebase;
+import android.johanmagnusson.se.projector.model.Project;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.EditText;
-import android.widget.Toast;
+
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.Map;
 
 public class AddProjectDialogFragment extends DialogFragment {
 
     public static final String TAG = AddProjectDialogFragment.class.getSimpleName();
 
-    public static AddProjectDialogFragment newInstance() { return new AddProjectDialogFragment(); }
+    private String mSiteKey;
+
+    public static AddProjectDialogFragment newInstance(String siteKey) {
+        AddProjectDialogFragment fragment = new AddProjectDialogFragment();
+
+        Bundle args = new Bundle();
+        args.putString(DataKey.SITE_KEY, siteKey);
+        fragment.setArguments(args);
+
+        return fragment;
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(getArguments() != null) {
+            mSiteKey = getArguments().getString(DataKey.SITE_KEY);
+        }
+    }
 
     @NonNull
     @Override
@@ -60,17 +87,14 @@ public class AddProjectDialogFragment extends DialogFragment {
     }
 
     private void addProject(String projectName, String projectNumber) {
-        // Create new site at /sites/$siteid
-//        DatabaseReference databaseSitesRef = FirebaseDatabase.getInstance()
-//                .getReference()
-//                .child(Firebase.NODE_SITES);
-//
-//        String key = databaseSitesRef.push().getKey();
-//        Site site = new Site(siteName, "Anonymous");
-//        Map<String, Object> postValues = site.toMap();
-//
-//        databaseSitesRef.child(key).setValue(postValues);
+        // Create new site at /projects/$siteid
+        DatabaseReference databaseSitesRef = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Firebase.NODE_PROJECTS);
 
-        Toast.makeText(getActivity(), projectName + " : " + projectNumber, Toast.LENGTH_LONG).show();
+        Project project = new Project(projectName, projectNumber);
+        Map<String, Object> postValues = project.toMap();
+
+        databaseSitesRef.child(mSiteKey).setValue(postValues);
     }
 }

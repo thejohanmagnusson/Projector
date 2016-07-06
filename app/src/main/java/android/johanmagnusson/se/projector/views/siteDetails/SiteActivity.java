@@ -45,12 +45,11 @@ public class SiteActivity extends AppCompatActivity {
         mActionBar = getSupportActionBar();
         if(mActionBar != null) { mActionBar.setDisplayHomeAsUpEnabled(true); }
 
-        //todo: change fab action(s)
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DialogFragment dialog = new AddProjectDialogFragment();
+                DialogFragment dialog = AddProjectDialogFragment.newInstance(mSiteKey);
                 dialog.show(getSupportFragmentManager(), AddProjectDialogFragment.TAG);
             }
         });
@@ -134,5 +133,11 @@ public class SiteActivity extends AppCompatActivity {
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 }

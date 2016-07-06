@@ -33,7 +33,7 @@ public class EditSiteNameDialogFragment extends DialogFragment {
 
         Bundle args = new Bundle();
         args.putString(DataKey.SITE_KEY, siteKey);
-        args.putString(DataKey.SITE_NAME_KEY, siteName);
+        args.putString(DataKey.SITE_NAME, siteName);
         fragment.setArguments(args);
 
         return fragment;
@@ -45,7 +45,7 @@ public class EditSiteNameDialogFragment extends DialogFragment {
 
         if (getArguments() != null) {
             mSiteKey = getArguments().getString(DataKey.SITE_KEY);
-            mSiteName = getArguments().getString(DataKey.SITE_NAME_KEY);
+            mSiteName = getArguments().getString(DataKey.SITE_NAME);
         }
     }
 

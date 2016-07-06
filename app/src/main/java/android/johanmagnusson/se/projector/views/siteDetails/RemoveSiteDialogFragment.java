@@ -15,6 +15,9 @@ import android.view.LayoutInflater;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class RemoveSiteDialogFragment extends DialogFragment{
 
     public static final String TAG = RemoveSiteDialogFragment.class.getSimpleName();
@@ -75,11 +78,12 @@ public class RemoveSiteDialogFragment extends DialogFragment{
     }
 
     private void removeSite() {
-        DatabaseReference databaseSiteRef = FirebaseDatabase.getInstance()
-                .getReference()
-                .child(Firebase.NODE_SITES)
-                .child(mSiteKey);
+        DatabaseReference databaseRef = FirebaseDatabase.getInstance().getReference();
 
-        databaseSiteRef.removeValue();
+        Map<String, Object> childUpdates = new HashMap<>();
+        childUpdates.put("/" + Firebase.NODE_PROJECTS + "/" + mSiteKey, null);
+        childUpdates.put("/" + Firebase.NODE_SITES + "/" + mSiteKey, null);
+
+        databaseRef.updateChildren(childUpdates);
     }
 }
