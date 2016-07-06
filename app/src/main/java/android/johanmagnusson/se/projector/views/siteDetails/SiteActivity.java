@@ -27,6 +27,7 @@ public class SiteActivity extends AppCompatActivity {
     private static final String TAG = SiteActivity.class.getSimpleName();
 
     private DatabaseReference mDatabaseSites;
+    private ValueEventListener mDatabaseSitesListener;
 
     private ActionBar mActionBar;
 
@@ -77,7 +78,7 @@ public class SiteActivity extends AppCompatActivity {
                     .child(Firebase.NODE_SITES)
                     .child(mSiteKey);
 
-            mDatabaseSites.addValueEventListener(new ValueEventListener() {
+            mDatabaseSitesListener = mDatabaseSites.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(DataSnapshot dataSnapshot) {
                     Site site = dataSnapshot.getValue(Site.class);
@@ -139,5 +140,6 @@ public class SiteActivity extends AppCompatActivity {
     protected void onDestroy() {
         super.onDestroy();
 
+        mDatabaseSites.removeEventListener(mDatabaseSitesListener);
     }
 }
