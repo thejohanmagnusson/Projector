@@ -4,10 +4,13 @@ import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentSender;
+import android.content.SharedPreferences;
 import android.johanmagnusson.se.projector.BuildConfig;
 import android.johanmagnusson.se.projector.MainActivity;
 import android.johanmagnusson.se.projector.R;
+import android.johanmagnusson.se.projector.constant.DataKey;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
@@ -31,7 +34,10 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
+// This class should NOT extend BaseActivity!
+// It handles it's own Firebase and GoogleApiClient
+public class LoginActivity extends AppCompatActivity
+        implements GoogleApiClient.OnConnectionFailedListener {
 
     private static final String TAG = LoginActivity.class.getSimpleName();
 
@@ -86,11 +92,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
                 if(user != null) {
-                    Log.d(TAG, "---- onAuthStateChanged:signed_in:" + user.getUid());
-                    onAuthenticated();
-                }
-                else {
-                    Log.d(TAG, "---- onAuthStateChanged:signed_out");
+                    onAuthenticated(user);
                 }
             }
         };
@@ -176,7 +178,13 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 });
     }
 
-    private void onAuthenticated() {
+    private void onAuthenticated(FirebaseUser user) {
+        // Save current authenticated user id
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(DataKey.USER_ID, user.getUid()).apply();
+
+        // Launch main activity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         startActivity(intent);

@@ -2,6 +2,7 @@
     <string name="app_name">Projector</string>
 
     <!-- Menus -->
+    <string name="action_log_out">Log out</string>
     <string name="action_edit">Edit</string>
     <string name="action_remove">Remove</string>
     <string name="action_settings">Settings</string>

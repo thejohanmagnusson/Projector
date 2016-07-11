@@ -1,5 +1,6 @@
 package android.johanmagnusson.se.projector.views.siteDetails;
 
+import android.johanmagnusson.se.projector.BaseActivity;
 import android.johanmagnusson.se.projector.R;
 import android.johanmagnusson.se.projector.constant.DataKey;
 import android.johanmagnusson.se.projector.constant.Firebase;
@@ -9,7 +10,6 @@ import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Menu;
@@ -22,7 +22,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class SiteActivity extends AppCompatActivity {
+public class SiteActivity extends BaseActivity {
 
     private static final String TAG = SiteActivity.class.getSimpleName();
 

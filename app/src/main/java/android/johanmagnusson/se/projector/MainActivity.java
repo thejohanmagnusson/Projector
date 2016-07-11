@@ -8,16 +8,12 @@ import android.johanmagnusson.se.projector.views.sites.SiteListFragment;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.DialogFragment;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
-public class MainActivity extends AppCompatActivity
+public class MainActivity extends BaseActivity
                           implements SiteListFragment.SiteListListener{
 
     private static final String TAG = MainActivity.class.getSimpleName();
@@ -56,7 +52,10 @@ public class MainActivity extends AppCompatActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        if(id == R.id.action_log_out){
+            logOut();
+        }
+        else if(id == R.id.action_settings) {
             return true;
         }
 
