@@ -2,6 +2,7 @@ package android.johanmagnusson.se.projector.views.sites;
 
 import android.content.Context;
 import android.johanmagnusson.se.projector.R;
+import android.johanmagnusson.se.projector.constant.DataKey;
 import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.johanmagnusson.se.projector.viewholder.SiteViewHolder;
@@ -25,7 +26,7 @@ public class SiteListFragment extends Fragment {
         public void onSiteSelected(String siteKey);
     }
 
-    private static final String TAG = SiteListFragment.class.getSimpleName();
+    public static final String TAG = SiteListFragment.class.getSimpleName();
 
     private SiteListListener mListener;
 
@@ -35,8 +36,36 @@ public class SiteListFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private LinearLayoutManager mManager;
 
+    private String mUserId;
+
+    public static SiteListFragment newInstance(String userId) {
+        Bundle args = new Bundle();
+        args.putString(DataKey.USER_ID, userId);
+
+        SiteListFragment siteListFragment = new SiteListFragment();
+        siteListFragment.setArguments(args);
+
+        return siteListFragment;
+    }
+
     public SiteListFragment() {
         // Required empty public constructor
+    }
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+
+        if(savedInstanceState == null) {
+            Bundle args = getArguments();
+
+            if(args != null) {
+                mUserId = args.getString(DataKey.USER_ID, null);
+            }
+            else {
+                mUserId = null;
+            }
+        }
     }
 
     @Override
@@ -60,7 +89,7 @@ public class SiteListFragment extends Fragment {
         mManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mManager);
 
-        Query siteQuery = mDatabase.child(Firebase.NODE_SITES);
+        Query siteQuery = mDatabase.child(Firebase.NODE_SITES).child(mUserId);
 
         mAdapter = new FirebaseRecyclerAdapter<Site, SiteViewHolder>(Site.class, R.layout.site_item, SiteViewHolder.class, siteQuery) {
             @Override
@@ -81,6 +110,13 @@ public class SiteListFragment extends Fragment {
         };
 
         mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putString(DataKey.USER_ID, mUserId);
+
+        super.onSaveInstanceState(outState);
     }
 
     @Override

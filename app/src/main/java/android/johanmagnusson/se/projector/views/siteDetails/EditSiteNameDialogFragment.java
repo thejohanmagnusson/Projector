@@ -25,13 +25,15 @@ public class EditSiteNameDialogFragment extends DialogFragment {
     public static final String TAG = EditSiteNameDialogFragment.class.getSimpleName();
 
     private EditText mSiteNameView;
+    private  String mUserId;
     private String mSiteKey;
     private String mSiteName;
 
-    public static EditSiteNameDialogFragment newInstance(String siteKey, String siteName) {
+    public static EditSiteNameDialogFragment newInstance(String userId, String siteKey, String siteName) {
         EditSiteNameDialogFragment fragment = new EditSiteNameDialogFragment();
 
         Bundle args = new Bundle();
+        args.putString(DataKey.USER_ID, userId);
         args.putString(DataKey.SITE_KEY, siteKey);
         args.putString(DataKey.SITE_NAME, siteName);
         fragment.setArguments(args);
@@ -43,9 +45,17 @@ public class EditSiteNameDialogFragment extends DialogFragment {
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments() != null) {
-            mSiteKey = getArguments().getString(DataKey.SITE_KEY);
-            mSiteName = getArguments().getString(DataKey.SITE_NAME);
+        if(savedInstanceState == null) {
+            Bundle args = getArguments();
+
+            if(args == null) {
+                dismiss();
+                return;
+            }
+
+            mUserId = args.getString(DataKey.USER_ID);
+            mSiteKey = args.getString(DataKey.SITE_KEY);
+            mSiteName = args.getString(DataKey.SITE_NAME);
         }
     }
 
@@ -84,10 +94,11 @@ public class EditSiteNameDialogFragment extends DialogFragment {
     }
 
     private void updateSiteName(String siteName) {
-        // Update site at /sites/$siteid
+        // Update site at /sites/$userid/$siteid
         DatabaseReference databaseSiteRef = FirebaseDatabase.getInstance()
                 .getReference()
                 .child(Firebase.NODE_SITES)
+                .child(mUserId)
                 .child(mSiteKey);
 
         HashMap<String, Object> updatedProperties = new HashMap<>();

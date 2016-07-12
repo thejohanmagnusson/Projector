@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.johanmagnusson.se.projector.R;
+import android.johanmagnusson.se.projector.constant.DataKey;
 import android.johanmagnusson.se.projector.constant.Firebase;
 import android.johanmagnusson.se.projector.model.Site;
 import android.os.Bundle;
@@ -24,15 +25,33 @@ public class AddSiteDialogFragment extends DialogFragment{
 
     public static final String TAG = SiteListFragment.class.getSimpleName();
 
-    public static AddSiteDialogFragment newInstance() {
-        return new AddSiteDialogFragment();
+    private String mUserId;
+
+    public static AddSiteDialogFragment newInstance(String userId) {
+        Bundle args = new Bundle();
+        args.putString(DataKey.USER_ID, userId);
+
+        AddSiteDialogFragment addSiteDialogFragment = new AddSiteDialogFragment();
+        addSiteDialogFragment.setArguments(args);
+
+        return addSiteDialogFragment;
     }
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //todo: handle rotation
+        if(savedInstanceState == null) {
+            Bundle args = getArguments();
+
+            // No need to continue if no args
+            if(args == null) {
+                dismiss();
+                return;
+            }
+
+            mUserId = args.getString(DataKey.USER_ID);
+        }
     }
 
     @NonNull
@@ -58,7 +77,7 @@ public class AddSiteDialogFragment extends DialogFragment{
                         String siteName = siteNameView.getText().toString();
 
                         if(!TextUtils.isEmpty(siteName))
-                            addSite(siteName);
+                            addSite(mUserId, siteName);
                     }
                 })
                 .setNegativeButton(negativeButtonText, new DialogInterface.OnClickListener() {
@@ -71,11 +90,12 @@ public class AddSiteDialogFragment extends DialogFragment{
         return builder.create();
     }
 
-    private void addSite(String siteName) {
-        // Create new site at /sites/$siteid
+    private void addSite(String userId, String siteName) {
+        // Create new site at /sites/$userid/$siteid
         DatabaseReference databaseSitesRef = FirebaseDatabase.getInstance()
                 .getReference()
-                .child(Firebase.NODE_SITES);
+                .child(Firebase.NODE_SITES)
+                .child(userId);
 
         String key = databaseSitesRef.push().getKey();
         Site site = new Site(siteName, "Anonymous");

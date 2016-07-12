@@ -9,6 +9,8 @@ import android.johanmagnusson.se.projector.BuildConfig;
 import android.johanmagnusson.se.projector.MainActivity;
 import android.johanmagnusson.se.projector.R;
 import android.johanmagnusson.se.projector.constant.DataKey;
+import android.johanmagnusson.se.projector.constant.Firebase;
+import android.johanmagnusson.se.projector.model.User;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
@@ -33,6 +35,11 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 // This class should NOT extend BaseActivity!
 // It handles it's own Firebase and GoogleApiClient
@@ -163,6 +170,7 @@ public class LoginActivity extends AppCompatActivity
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
+                        //Todo: clean up logging an message handling
                         Log.d(TAG, "---- signInWithCredential:onComplete:" + task.isSuccessful());
 
                         // Successful login is notified to the mFirebaseAuthListener.
@@ -179,10 +187,36 @@ public class LoginActivity extends AppCompatActivity
     }
 
     private void onAuthenticated(FirebaseUser user) {
-        // Save current authenticated user id
+        final String userId = user.getUid();
+        final String userName = user.getDisplayName();
+
+        // Save current authenticated user data
         SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(DataKey.USER_ID, user.getUid()).apply();
+        editor.putString(DataKey.USER_ID, userId).apply();
+
+        // Save user to Firebase if new user
+        final DatabaseReference databaseUser = FirebaseDatabase.getInstance()
+                .getReference()
+                .child(Firebase.NODE_USERS)
+                .child(userId);
+
+        databaseUser.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // No value yet for the userId
+                if(dataSnapshot.getValue() == null) {
+                    User user = new User(userName);
+
+                    databaseUser.setValue(user);
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(TAG, getString(R.string.firebase_read_error) + databaseError.getMessage());
+            }
+        });
 
         // Launch main activity
         Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -241,8 +275,9 @@ public class LoginActivity extends AppCompatActivity
         public Dialog onCreateDialog(Bundle savedInstanceState) {
             // Get the error code and retrieve the appropriate dialog
             int errorCode = this.getArguments().getInt(DIALOG_ERROR);
-            return GoogleApiAvailability.getInstance().getErrorDialog(
-                    this.getActivity(), errorCode, REQUEST_RESOLVE_ERROR);
+
+            return GoogleApiAvailability.getInstance()
+                    .getErrorDialog(this.getActivity(), errorCode, REQUEST_RESOLVE_ERROR);
         }
 
         @Override

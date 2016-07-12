@@ -65,17 +65,13 @@ public class SiteActivity extends BaseActivity {
                 return;
             }
 
-            SiteFragment siteFragment = new SiteFragment();
-
-            Bundle args = new Bundle();
-            args.putString(DataKey.SITE_KEY, mSiteKey);
-            siteFragment.setArguments(args);
-
+            SiteFragment siteFragment = new SiteFragment().newInstance(mUserId, mSiteKey);
             getSupportFragmentManager().beginTransaction().add(R.id.site_container, siteFragment).commit();
 
             mDatabaseSites = FirebaseDatabase.getInstance()
                     .getReference()
                     .child(Firebase.NODE_SITES)
+                    .child(mUserId)
                     .child(mSiteKey);
 
             mDatabaseSitesListener = mDatabaseSites.addValueEventListener(new ValueEventListener() {
@@ -112,7 +108,6 @@ public class SiteActivity extends BaseActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         int id = item.getItemId();
-        String title;
 
         switch (id) {
             case android.R.id.home:
@@ -120,12 +115,12 @@ public class SiteActivity extends BaseActivity {
                 return true;
 
             case R.id.action_edit:
-                DialogFragment editDialog = new EditSiteNameDialogFragment().newInstance(mSiteKey, mSite.getName());
+                DialogFragment editDialog = new EditSiteNameDialogFragment().newInstance(mUserId, mSiteKey, mSite.getName());
                 editDialog.show(getSupportFragmentManager(), EditSiteNameDialogFragment.TAG);
                 return true;
 
             case R.id.action_remove:
-                DialogFragment removeDialog = new RemoveSiteDialogFragment().newInstance(mSiteKey);
+                DialogFragment removeDialog = new RemoveSiteDialogFragment().newInstance(mUserId, mSiteKey);
                 removeDialog.show(getSupportFragmentManager(), RemoveSiteDialogFragment.TAG);
                 return true;
 

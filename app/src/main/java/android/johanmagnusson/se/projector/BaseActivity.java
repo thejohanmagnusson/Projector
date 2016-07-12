@@ -48,11 +48,11 @@ public class BaseActivity extends AppCompatActivity
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
                 .build();
 
+        // Get user id for the logged in user
         final SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
         mUserId = sharedPreferences.getString(DataKey.USER_ID, null);
 
         mFirebaseAuth = FirebaseAuth.getInstance();
-
         // Listener is added in onStart()
         mFirebaseAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -63,7 +63,6 @@ public class BaseActivity extends AppCompatActivity
                     // Clear logged in user data
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(DataKey.USER_ID, null).apply();
-
 
                     startActivityForLogIn();
                 }
