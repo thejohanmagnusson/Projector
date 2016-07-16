@@ -43,6 +43,7 @@ public class BaseActivity extends AppCompatActivity
                 .requestEmail()
                 .build();
 
+        // Closed in onStop() if open
         mGoogleApiClient = new GoogleApiClient.Builder(this)
                 .enableAutoManage(this, this /*OnConnectionFailedListener*/)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, signInOptions)
@@ -85,6 +86,10 @@ public class BaseActivity extends AppCompatActivity
         // Added in onStart()
         if(mFirebaseAuthListener != null)
             mFirebaseAuth.removeAuthStateListener(mFirebaseAuthListener);
+
+        if(mGoogleApiClient.isConnected()) {
+            mGoogleApiClient.disconnect();
+        }
     }
 
     protected void logOut() {
